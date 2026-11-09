@@ -1,0 +1,14 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+var kb = Keyboard.current;
+var s = $"kbEnabled={kb.enabled} updateMode={InputSystem.settings.updateMode} ";
+InputSystem.settings.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
+InputSystem.settings.editorInputBehaviorInPlayMode = InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;
+InputSystem.QueueStateEvent(kb, new KeyboardState(Key.W));
+InputSystem.Update();
+s += $"afterManualUpdate W={kb.wKey.isPressed} ";
+int f = Time.frameCount; await Wait.Until(() => Time.frameCount > f + 3, 20000);
+s += $"after3frames W={kb.wKey.isPressed} speed={GameObject.Find("PlayerCar").GetComponent<CarController>().CurrentSpeed}";
+InputSystem.QueueStateEvent(kb, new KeyboardState());
+return s;

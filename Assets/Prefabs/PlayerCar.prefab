@@ -1,0 +1,228 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &5942193094023875914
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2790860727180249567, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2790860727180249567, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 2790860727180249567, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2790860727180249567, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2790860727180249567, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2790860727180249567, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2790860727180249567, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2790860727180249567, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2790860727180249567, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2790860727180249567, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4043886258159052832, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      propertyPath: m_Name
+      value: PlayerCar
+      objectReference: {fileID: 0}
+    - target: {fileID: 4043886258159052832, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4043886258159052832, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5359171620902193101}
+    - targetCorrespondingSourceObject: {fileID: 4043886258159052832, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 899566690485180686}
+    - targetCorrespondingSourceObject: {fileID: 4043886258159052832, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4043129556905539720}
+  m_SourcePrefab: {fileID: 100100000, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+--- !u!1 &7667426755211552106 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4043886258159052832, guid: fc08d9e2a7de2c543afabc8b69a93688, type: 3}
+  m_PrefabInstance: {fileID: 5942193094023875914}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &5359171620902193101
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7667426755211552106}
+  m_Material: {fileID: 13400000, guid: ed428c4e2d8635244b8f0f1f3444a040, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0913892, y: 1.7086833, z: 3.5491035}
+  m_Center: {x: 0, y: 0.8495787, z: -0.024867415}
+--- !u!54 &899566690485180686
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7667426755211552106}
+  serializedVersion: 5
+  m_Mass: 1000
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 80
+  m_CollisionDetection: 2
+--- !u!114 &4043129556905539720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7667426755211552106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd4ed61f3a49932498529ba423383500, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarController
+  maxSpeed: 15
+  acceleration: 8
+  brakeDeceleration: 20
+  coastDeceleration: 3
+  mouseSensitivity: 0.15
+  lockCursor: 1
+  jumpHeight: 2
+  maxJumps: 2
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  accelerateAction:
+    m_Name: Accelerate
+    m_Type: 1
+    m_ExpectedControlType: 
+    m_Id: 82795902-f6dc-40a1-9aa8-764e38f48371
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: fed444fd-f1ba-4ae7-b8f8-37a4231a0265
+      m_Path: <Keyboard>/w
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Accelerate
+      m_Flags: 0
+    m_Flags: 0
+    m_Priority: 0
+  brakeAction:
+    m_Name: Brake
+    m_Type: 1
+    m_ExpectedControlType: 
+    m_Id: b4edf141-cb2d-4aff-9bc5-916a3bf11907
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 6649365d-6e3b-4529-a384-481debdd4bfb
+      m_Path: <Keyboard>/s
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Brake
+      m_Flags: 0
+    m_Flags: 0
+    m_Priority: 0
+  steerAction:
+    m_Name: Steer
+    m_Type: 0
+    m_ExpectedControlType: Axis
+    m_Id: 188875b6-ce41-482d-825d-12971e2bbbb8
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: f5a67d6b-7f65-442f-8df7-ce2830166eee
+      m_Path: <Mouse>/delta/x
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Steer
+      m_Flags: 0
+    m_Flags: 0
+    m_Priority: 0
+  jumpAction:
+    m_Name: Jump
+    m_Type: 1
+    m_ExpectedControlType: 
+    m_Id: 4cdc5a3f-d18c-4fe2-bc15-99a8f29bde55
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: b09352b6-1a3b-41e5-bae2-4d366fbaca7a
+      m_Path: <Keyboard>/space
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Jump
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 738afc3e-03dc-4800-ba3c-dd82823aa68d
+      m_Path: <Gamepad>/buttonSouth
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Jump
+      m_Flags: 0
+    m_Flags: 0
+    m_Priority: 0

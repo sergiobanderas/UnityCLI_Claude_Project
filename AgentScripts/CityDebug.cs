@@ -1,0 +1,14 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+Application.runInBackground = true;
+var car = GameObject.Find("PlayerCar");
+var ctrl = car.GetComponent<CarController>();
+var rb = car.GetComponent<Rigidbody>();
+var f = typeof(CarController).GetField("accelerateAction", System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance);
+var act = (InputAction)f.GetValue(ctrl);
+InputSystem.QueueStateEvent(Keyboard.current, new KeyboardState(Key.W));
+float t = Time.time; await Wait.Until(() => Time.time - t >= 0.5f, 20000);
+var s = $"enabled={ctrl.enabled} active={car.activeInHierarchy} kin={rb.isKinematic} cons={rb.constraints} actEnabled={act.enabled} bindings={act.bindings.Count} pressed={act.IsPressed()} kbW={Keyboard.current.wKey.isPressed} speed={ctrl.CurrentSpeed} timeScale={Time.timeScale} kbDevices={InputSystem.devices.Count} bgBehavior={InputSystem.settings.backgroundBehavior} editorBehavior={InputSystem.settings.editorInputBehaviorInPlayMode} focus={Application.isFocused}";
+InputSystem.QueueStateEvent(Keyboard.current, new KeyboardState());
+return s;

@@ -1,0 +1,23 @@
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.InputSystem;
+using System.Reflection;
+var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/PlayerCar.prefab");
+var go = Object.Instantiate(prefab);
+var c = go.GetComponent<CarController>();
+var fl = BindingFlags.NonPublic | BindingFlags.Instance;
+var act = (InputAction)typeof(CarController).GetField("reverseAction", fl).GetValue(c);
+string binding = act.bindings.Count > 0 ? act.bindings[0].path : "none";
+var thr = typeof(CarController).GetField("throttleInput", fl);
+var rev = typeof(CarController).GetField("reverseInput", fl);
+var spd = typeof(CarController).GetField("currentSpeed", fl);
+var upd = typeof(CarController).GetMethod("UpdateSpeed", fl);
+var sb = new System.Text.StringBuilder($"reverse binding={binding}\n");
+void Run(string tag, float w, float s, float secs) { thr.SetValue(c, w); rev.SetValue(c, s); for (int i = 0; i < secs / 0.02f; i++) upd.Invoke(c, new object[]{0.02f}); sb.Append($"{tag}: speed={c.CurrentSpeed:0.00}\n"); }
+Run("W 2s", 1, 0, 2f);
+Run("S 0.5s (braking)", 0, 1, 0.5f);
+Run("S +2s (reverse)", 0, 1, 2f);
+Run("release 1s", 0, 0, 1f);
+Run("W 0.5s from reverse", 1, 0, 0.5f);
+Object.DestroyImmediate(go);
+return sb.ToString();

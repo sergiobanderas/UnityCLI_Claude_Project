@@ -1,0 +1,23 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+Application.runInBackground = true;
+var prevBehavior = InputSystem.settings.editorInputBehaviorInPlayMode;
+var prevBg = InputSystem.settings.backgroundBehavior;
+InputSystem.settings.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
+foreach (var d in InputSystem.devices) if (!d.enabled) InputSystem.EnableDevice(d);
+InputSystem.settings.editorInputBehaviorInPlayMode = InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;
+var car = GameObject.Find("PlayerCar");
+var ctrl = car.GetComponent<CarController>();
+var kb = Keyboard.current;
+var log = new System.Text.StringBuilder();
+async System.Threading.Tasks.Task Sec(float s) { float t = Time.time; await Wait.Until(() => Time.time - t >= s, 20000); }
+void Snap(string tag) => log.Append($"{tag}: pos={car.transform.position} yaw={car.transform.eulerAngles.y:0} speed={ctrl.CurrentSpeed:0.0}\n");
+await Sec(0.5f); Snap("start");
+InputSystem.QueueStateEvent(kb, new KeyboardState(Key.W)); await Sec(2.5f); Snap("W 2.5s");
+InputSystem.QueueStateEvent(kb, new KeyboardState(Key.W, Key.Space)); await Sec(0.1f);
+InputSystem.QueueStateEvent(kb, new KeyboardState(Key.W)); await Sec(0.3f); Snap("jump");
+InputSystem.QueueStateEvent(kb, new KeyboardState()); await Sec(1.5f); Snap("coast");
+InputSystem.settings.editorInputBehaviorInPlayMode = prevBehavior;
+InputSystem.settings.backgroundBehavior = prevBg;
+return log.ToString();
