@@ -137,9 +137,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarController
   maxSpeed: 15
   acceleration: 8
+  maxReverseSpeed: 6
+  reverseAcceleration: 6
   brakeDeceleration: 20
   coastDeceleration: 3
-  mouseSensitivity: 0.15
+  turnSpeed: 120
+  fullSteerSpeed: 4
   lockCursor: 1
   jumpHeight: 2
   maxJumps: 2
@@ -150,12 +153,12 @@ MonoBehaviour:
     m_Name: Accelerate
     m_Type: 1
     m_ExpectedControlType: 
-    m_Id: 82795902-f6dc-40a1-9aa8-764e38f48371
+    m_Id: c1e76795-8e91-440e-9d79-a9268b20b8dc
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings:
     - m_Name: 
-      m_Id: fed444fd-f1ba-4ae7-b8f8-37a4231a0265
+      m_Id: 057838fa-755e-4891-87b6-3a0bf3b7a722
       m_Path: <Keyboard>/w
       m_Interactions: 
       m_Processors: 
@@ -164,39 +167,87 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
     m_Priority: 0
-  brakeAction:
-    m_Name: Brake
+  reverseAction:
+    m_Name: Reverse
     m_Type: 1
     m_ExpectedControlType: 
-    m_Id: b4edf141-cb2d-4aff-9bc5-916a3bf11907
+    m_Id: 6a0462bd-c82f-4afc-a6dc-7d7a2f30b28c
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings:
     - m_Name: 
-      m_Id: 6649365d-6e3b-4529-a384-481debdd4bfb
+      m_Id: 3ec2cb71-8788-4899-a6fa-186de7aa9865
       m_Path: <Keyboard>/s
       m_Interactions: 
       m_Processors: 
       m_Groups: 
-      m_Action: Brake
+      m_Action: Reverse
       m_Flags: 0
     m_Flags: 0
     m_Priority: 0
-  steerAction:
-    m_Name: Steer
+  turnAction:
+    m_Name: Turn
     m_Type: 0
     m_ExpectedControlType: Axis
-    m_Id: 188875b6-ce41-482d-825d-12971e2bbbb8
+    m_Id: 76fd9aa7-498c-4f35-883d-53cc34478e55
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: f5a67d6b-7f65-442f-8df7-ce2830166eee
-      m_Path: <Mouse>/delta/x
+    - m_Name: 1DAxis
+      m_Id: 39fca1a5-ed31-4454-8d22-cc0b40c994da
+      m_Path: 1DAxis
       m_Interactions: 
       m_Processors: 
       m_Groups: 
-      m_Action: Steer
+      m_Action: Turn
+      m_Flags: 4
+    - m_Name: Negative
+      m_Id: ae57cd8b-5a11-4d0a-b852-1568061992aa
+      m_Path: <Keyboard>/a
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Turn
+      m_Flags: 8
+    - m_Name: Positive
+      m_Id: 55d362b5-1dab-4190-91d7-57853f486f70
+      m_Path: <Keyboard>/d
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Turn
+      m_Flags: 8
+    - m_Name: 1DAxis
+      m_Id: 06abcb19-1b4d-4e16-8042-d486b447be9f
+      m_Path: 1DAxis
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Turn
+      m_Flags: 4
+    - m_Name: Negative
+      m_Id: cda47d28-b848-4f60-9128-c6598c91ddda
+      m_Path: <Keyboard>/leftArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Turn
+      m_Flags: 8
+    - m_Name: Positive
+      m_Id: 3a206331-2c50-4bff-99cf-980bff5d9fba
+      m_Path: <Keyboard>/rightArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Turn
+      m_Flags: 8
+    - m_Name: 
+      m_Id: c0020039-7f69-47f3-af4e-af9d8226b2ef
+      m_Path: <Gamepad>/leftStick/x
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Turn
       m_Flags: 0
     m_Flags: 0
     m_Priority: 0
@@ -204,12 +255,12 @@ MonoBehaviour:
     m_Name: Jump
     m_Type: 1
     m_ExpectedControlType: 
-    m_Id: 4cdc5a3f-d18c-4fe2-bc15-99a8f29bde55
+    m_Id: b1752419-07fc-40ff-99fb-627aaa8af376
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings:
     - m_Name: 
-      m_Id: b09352b6-1a3b-41e5-bae2-4d366fbaca7a
+      m_Id: f561a577-e8f8-4524-8f63-acf3fe23d817
       m_Path: <Keyboard>/space
       m_Interactions: 
       m_Processors: 
@@ -217,7 +268,7 @@ MonoBehaviour:
       m_Action: Jump
       m_Flags: 0
     - m_Name: 
-      m_Id: 738afc3e-03dc-4800-ba3c-dd82823aa68d
+      m_Id: 7eb5b8fe-d73d-49c1-b7f4-77a259f3455e
       m_Path: <Gamepad>/buttonSouth
       m_Interactions: 
       m_Processors: 

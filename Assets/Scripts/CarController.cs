@@ -4,8 +4,9 @@ using UnityEngine.Serialization;
 
 /// <summary>
 /// Arcade car controller driven by a Rigidbody and the new Input System.
-/// W accelerates, S brakes and then drives in reverse, horizontal mouse movement steers (yaw),
+/// W accelerates, S brakes and then drives in reverse, A/D steer (only while moving),
 /// and Space jumps (double jump by default) while gravity pulls the car down.
+/// The mouse is left free for the camera (see the Cinemachine orbital camera).
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
@@ -18,7 +19,7 @@ public class CarController : MonoBehaviour
 
     private float throttleInput;
     private float reverseInput;
-    private float pendingYaw;
+    private float turnInput;
     private bool jumpRequested;
 
     private float currentSpeed;
@@ -44,8 +45,11 @@ public class CarController : MonoBehaviour
     [SerializeField] private float coastDeceleration = 3f;
 
     [Header("Steering")]
-    [Tooltip("Degrees of rotation per pixel of horizontal mouse movement.")]
-    [SerializeField] private float mouseSensitivity = 0.15f;
+    [Tooltip("Maximum turning speed in degrees per second.")]
+    [SerializeField] private float turnSpeed = 120f;
+
+    [Tooltip("Speed (units per second) at which steering reaches full strength. Below it the car turns less, and it cannot turn while stopped.")]
+    [SerializeField] private float fullSteerSpeed = 4f;
 
     [Tooltip("Lock and hide the cursor while the car is active (press Esc in the Editor to release it).")]
     [SerializeField] private bool lockCursor = true;
@@ -65,7 +69,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private InputAction accelerateAction = new InputAction("Accelerate", InputActionType.Button);
     [FormerlySerializedAs("brakeAction")]
     [SerializeField] private InputAction reverseAction = new InputAction("Reverse", InputActionType.Button);
-    [SerializeField] private InputAction steerAction = new InputAction("Steer", InputActionType.Value);
+    [SerializeField] private InputAction turnAction = new InputAction("Turn", InputActionType.Value);
     [SerializeField] private InputAction jumpAction = new InputAction("Jump", InputActionType.Button);
 
     /// <summary>Current speed in units per second (negative when reversing).</summary>
@@ -76,7 +80,7 @@ public class CarController : MonoBehaviour
         // Default bindings, applied when the component is added or reset.
         accelerateAction = CreateButtonAction("Accelerate", "<Keyboard>/w");
         reverseAction = CreateButtonAction("Reverse", "<Keyboard>/s");
-        steerAction = CreateDefaultSteerAction();
+        turnAction = CreateDefaultTurnAction();
         jumpAction = CreateButtonAction("Jump", "<Keyboard>/space", "<Gamepad>/buttonSouth");
         ConfigureRigidbody(GetComponent<Rigidbody>());
     }
@@ -89,7 +93,7 @@ public class CarController : MonoBehaviour
         // Safety net in case the actions were serialized without bindings.
         if (accelerateAction.bindings.Count == 0) accelerateAction = CreateButtonAction("Accelerate", "<Keyboard>/w");
         if (reverseAction.bindings.Count == 0) reverseAction = CreateButtonAction("Reverse", "<Keyboard>/s");
-        if (steerAction.bindings.Count == 0) steerAction = CreateDefaultSteerAction();
+        if (turnAction.bindings.Count == 0) turnAction = CreateDefaultTurnAction();
         if (jumpAction.bindings.Count == 0) jumpAction = CreateButtonAction("Jump", "<Keyboard>/space", "<Gamepad>/buttonSouth");
     }
 
@@ -97,7 +101,7 @@ public class CarController : MonoBehaviour
     {
         accelerateAction.Enable();
         reverseAction.Enable();
-        steerAction.Enable();
+        turnAction.Enable();
         jumpAction.Enable();
 
         if (lockCursor)
@@ -111,7 +115,7 @@ public class CarController : MonoBehaviour
     {
         accelerateAction.Disable();
         reverseAction.Disable();
-        steerAction.Disable();
+        turnAction.Disable();
         jumpAction.Disable();
 
         if (lockCursor)
@@ -126,8 +130,8 @@ public class CarController : MonoBehaviour
         throttleInput = accelerateAction.IsPressed() ? 1f : 0f;
         reverseInput = reverseAction.IsPressed() ? 1f : 0f;
 
-        // Mouse delta is per frame, so accumulate it until the next physics step.
-        pendingYaw += steerAction.ReadValue<float>() * mouseSensitivity;
+        // -1 = A (left), +1 = D (right).
+        turnInput = turnAction.ReadValue<float>();
 
         if (jumpAction.WasPressedThisFrame())
         {
@@ -138,7 +142,7 @@ public class CarController : MonoBehaviour
     private void FixedUpdate()
     {
         UpdateSpeed(Time.fixedDeltaTime);
-        ApplySteering();
+        ApplySteering(Time.fixedDeltaTime);
 
         // Horizontal velocity follows the car's facing; vertical velocity is left to gravity.
         Vector3 velocity = transform.forward * currentSpeed;
@@ -175,16 +179,19 @@ public class CarController : MonoBehaviour
         currentSpeed = Mathf.Clamp(currentSpeed, -maxReverseSpeed, maxSpeed);
     }
 
-    private void ApplySteering()
+    private void ApplySteering(float deltaTime)
     {
-        if (Mathf.Approximately(pendingYaw, 0f))
+        if (Mathf.Approximately(turnInput, 0f))
         {
             return;
         }
 
-        Quaternion turn = Quaternion.Euler(0f, pendingYaw, 0f);
-        body.MoveRotation(body.rotation * turn);
-        pendingYaw = 0f;
+        // Like a real car: no turning while stopped, gradual at low speed,
+        // and steering is inverted when driving in reverse (sign of the speed).
+        float speedFactor = Mathf.Clamp(currentSpeed / fullSteerSpeed, -1f, 1f);
+        float yaw = turnInput * turnSpeed * speedFactor * deltaTime;
+
+        body.MoveRotation(body.rotation * Quaternion.Euler(0f, yaw, 0f));
     }
 
     private void HandleJump(ref Vector3 velocity)
@@ -254,11 +261,21 @@ public class CarController : MonoBehaviour
         return action;
     }
 
-    private static InputAction CreateDefaultSteerAction()
+    private static InputAction CreateDefaultTurnAction()
     {
-        // Horizontal mouse movement in pixels per frame.
-        var action = new InputAction("Steer", InputActionType.Value, expectedControlType: "Axis");
-        action.AddBinding("<Mouse>/delta/x");
+        // A/D (and left/right arrows) as a -1..1 axis; gamepad left stick X as well.
+        var action = new InputAction("Turn", InputActionType.Value, expectedControlType: "Axis");
+
+        action.AddCompositeBinding("1DAxis")
+            .With("Negative", "<Keyboard>/a")
+            .With("Positive", "<Keyboard>/d");
+
+        action.AddCompositeBinding("1DAxis")
+            .With("Negative", "<Keyboard>/leftArrow")
+            .With("Positive", "<Keyboard>/rightArrow");
+
+        action.AddBinding("<Gamepad>/leftStick/x");
+
         return action;
     }
 }

@@ -30,11 +30,13 @@ Unity instala los paquetes solo al abrir el proyecto, a partir de `Packages/mani
 |---|---|
 | **W** | Acelerar |
 | **S** | Frenar y, una vez parado, marcha atrás |
-| **Ratón izquierda/derecha** | Girar el coche |
+| **A / D** (o ← →) | Girar el coche (solo en movimiento; marcha atrás gira como un coche real) |
 | **Espacio** | Saltar (se puede saltar otra vez en el aire) |
+| **Ratón** | Mover la cámara alrededor del coche. Si dejas de moverlo, a los 1,5 s vuelve detrás del coche |
+| **Rueda del ratón** | Acercar o alejar la cámara |
 | **Esc** | Liberar el cursor (en el Editor) |
 
-Con mando, el botón inferior (A / Cruz) también salta.
+Con mando: el stick izquierdo gira, el stick derecho mueve la cámara y el botón inferior (A / Cruz) salta.
 
 ## Escenas
 
@@ -67,7 +69,7 @@ Assets/
 
 - **Velocidad.** `currentSpeed` va de `-maxReverseSpeed` a `maxSpeed`. Si es negativa, el coche va marcha atrás. Si pulsas la dirección contraria mientras el coche aún se mueve, primero frena con `brakeDeceleration`.
 - **Dirección.** La velocidad horizontal es `transform.forward * currentSpeed`. La vertical la controla la gravedad.
-- **Giro.** Lee el movimiento horizontal del ratón (`<Mouse>/delta/x`), lo acumula en `Update` y lo aplica en `FixedUpdate` con `Rigidbody.MoveRotation`.
+- **Giro.** A/D forman un eje de -1 a 1. En `FixedUpdate` el coche gira `turnSpeed` grados por segundo con `Rigidbody.MoveRotation`, multiplicado por un factor que depende de la velocidad. Ese factor vale 0 con el coche parado, llega a 1 a partir de `fullSteerSpeed` y es negativo marcha atrás, así que el giro se invierte.
 - **Salto.** Calcula la velocidad inicial con `v = √(2·g·h)` para llegar exactamente a `jumpHeight`. El contador de saltos se reinicia al tocar el suelo, que se detecta lanzando un raycast hacia abajo. `maxJumps = 2` permite saltar una vez más en el aire.
 - **Entrada.** Usa `InputAction` del nuevo Input System. Los controles se pueden cambiar desde el Inspector.
 
@@ -77,7 +79,8 @@ Todos los valores (velocidad, aceleración, sensibilidad del ratón, altura del 
 
 La `Main Camera` tiene un **CinemachineBrain**. La cámara virtual `ThirdPersonCamera` está configurada así:
 
-- **CinemachineFollow** en modo `LockToTargetWithWorldUp`: se queda detrás del coche, a 4,5 m de altura y 9 m de distancia, y le sigue con suavizado de posición y de giro.
+- **CinemachineOrbitalFollow** (órbita esférica de 10 m de radio): gira alrededor del coche. El ángulo 0 queda siempre detrás del coche. La cámara se mueve 360° en horizontal y entre 5° y 60° en vertical. Al soltar el ratón, *Recentering* la devuelve detrás del coche.
+- **CinemachineInputAxisController**: lee las acciones por defecto de Cinemachine, *Look* (ratón o stick derecho) para orbitar y *Zoom* (rueda del ratón) para el radio.
 - **CinemachineRotationComposer**: mantiene el coche centrado en pantalla, con suavizado.
 
 ## Desarrollo con Unity CLI y Claude Code
